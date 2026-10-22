@@ -34,6 +34,7 @@
 }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0}
 img{max-width:100%}
@@ -390,10 +391,11 @@ table.cmp{border-collapse:collapse;width:100%;min-width:600px;font-size:.9rem}
             <textarea class="msg" id="qMsg" readonly></textarea>
           </label>
           <div class="copy-row">
-            <button class="btn" type="button" id="copyMsg"><span class="en">Copy message</span><span class="zh">复制信息</span></button>
+            <a class="btn" id="sendForm" href="#contact" target="_blank" rel="noopener" hidden><span class="en">Send this request</span><span class="zh">发送报价申请</span></a>
+            <button class="ghost" type="button" id="copyMsg"><span class="en">Copy message</span><span class="zh">复制信息</span></button>
             <span class="status" id="copyStatus" role="status"></span>
           </div>
-          <p class="hint"><span class="en">Then send it by text or WeChat. Contact details are at the bottom of the page.</span><span class="zh">然后通过短信或微信发给我，联系方式在页面底部。</span></p>
+          <p class="hint"><span class="en">“Send this request” opens a short form with your choices already filled in. You can also copy the message and text or WeChat me.</span><span class="zh">点“发送报价申请”会打开已预填好的表单；也可以复制信息，通过短信或微信发给我。</span></p>
         </div>
       </div>
     </div>
@@ -478,7 +480,16 @@ const CONTACT = {
   phone: "(734) 508-2592",
   email: "swcomputercare@gmail.com",
   wechat: "RiseeH_",
-  bookingUrl: ""   // Google Form link
+  bookingUrl: "https://docs.google.com/forms/d/e/1FAIpQLSc4OVGgXgs89s4YhvGZPiA2_UBAmck2INqif2CLU_XA8pLO5Q/viewform"   // Google Form link
+};
+
+/* Google Form question IDs, used to pre-fill the form from the quote builder. */
+const FORM_FIELDS = {
+  lang: "entry.1667330427",
+  device: "entry.656071590",
+  model: "entry.812607673",
+  services: "entry.127244798",
+  handoff: "entry.1956564436"
 };
 
 /* AI device check. After setting up the Cloudflare Worker (see worker/README.md),
@@ -822,6 +833,23 @@ function updateQuote() {
     ? `你好，我想咨询维修报价。\n电脑类型：${t.zh}\n型号：${model || "（请填写型号）"}\n服务：${names || "（还没选）"}\n预估人工费：$${total}${needsParts ? " + 配件费" : ""}\n交接方式：${handoff.zh}\n问题描述：`
     : `Hi! I'd like a quote.\nDevice type: ${t.en}\nModel: ${model || "(add your model)"}\nServices: ${names || "(none picked yet)"}\nEstimated labor: $${total}${needsParts ? " + parts" : ""}\nHand-off: ${handoff.en}\nWhat's wrong: `;
   $("copyStatus").textContent = "";
+
+  const send = $("sendForm");
+  if (CONTACT.bookingUrl) {
+    send.hidden = false;
+    send.href = formUrl(picked, t, handoff);
+  }
+}
+
+/* Link to the Google Form with this quote's choices filled in. */
+function formUrl(picked, t, handoff) {
+  const p = new URLSearchParams({ usp: "pp_url" });
+  p.append(FORM_FIELDS.lang, state.lang === "zh" ? "中文" : "English");
+  p.append(FORM_FIELDS.device, t.en + " / " + t.zh);
+  if (state.model.trim()) p.append(FORM_FIELDS.model, state.model.trim());
+  picked.forEach(s => p.append(FORM_FIELDS.services, s.en + " / " + s.zh));
+  p.append(FORM_FIELDS.handoff, handoff.en + " / " + handoff.zh);
+  return CONTACT.bookingUrl + "?" + p.toString();
 }
 
 /* ---------- copy ---------- */
