@@ -14,4 +14,4 @@ DAILY_LIMIT = "200"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
+id = "c8e86faa638a4534b8489fb868f3aa63"
