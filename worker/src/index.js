@@ -56,7 +56,7 @@ export default {
     if (request.method !== "POST") return reply({ error: "method" }, 405);
     if (!allowed.includes(origin)) return reply({ error: "origin" }, 403);
     if (!env.KV) return reply({ error: "setup_kv" }, 500);
-    if (!env.ANTHROPIC_API_KEY) return reply({ error: "setup_key" }, 500);
+    if (!env.ANTHROPIC_API_KEY) return reply({ error: "setup_key", settings_found: Object.keys(env).sort() }, 500);
 
     let body;
     try { body = await request.json(); } catch { return reply({ error: "bad_request" }, 400); }
