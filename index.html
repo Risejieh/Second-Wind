@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second Wind Laptop Care</title>
+<meta name="description" content="Laptop cleaning, repair and upgrades in Ann Arbor and Novi, Michigan. Free pickup nearby, before-and-after temperature tests, English and Chinese.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a repair-bench work order. Thermal readout hero, price list with leaders, quote builder, numbered hand-off steps, FAQ, contact. */
+:root{
+  --bg:#F1F4F6; --surface:#FFFFFF; --ink:#0E1A26; --muted:#4F5D6A; --line:#D3DBE1;
+  --cool:#0A6F80; --cool-soft:#DCEEF1; --on-cool:#FFFFFF;
+  --warm:#D99A0B; --heat:#C9430C; --heat-soft:#FBE5DA;
+  --display:"Archivo","Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B131A; --surface:#121D26; --ink:#E4ECF1; --muted:#97A7B4; --line:#24323E;
+    --cool:#4FC2D2; --cool-soft:#11303A; --on-cool:#05232B;
+    --warm:#F2B84B; --heat:#FF8A4C; --heat-soft:#3A2016;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B131A; --surface:#121D26; --ink:#E4ECF1; --muted:#97A7B4; --line:#24323E;
+  --cool:#4FC2D2; --cool-soft:#11303A; --on-cool:#05232B;
+  --warm:#F2B84B; --heat:#FF8A4C; --heat-soft:#3A2016;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0}
+img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--cool)}
+:focus-visible{outline:2px solid var(--cool);outline-offset:3px;border-radius:4px}
+
+/* language switch */
+.zh{display:none}
+:root[data-lang="zh"] .en{display:none}
+:root[data-lang="zh"] .zh{display:revert}
+
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(48px,7vw,88px)}
+.band + .band{border-top:1px solid var(--line)}
+
+h1,h2,h3{font-family:var(--display);font-stretch:116%;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.25rem,5.6vw,3.75rem);font-weight:800;letter-spacing:-.015em}
+h2{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:750;letter-spacing:-.01em}
+h3{font-size:1.05rem;font-weight:700;font-stretch:108%;line-height:1.2}
+p{margin:0}
+.label{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.section-head{display:grid;gap:12px;max-width:62ch;margin-bottom:clamp(28px,4vw,44px)}
+.section-head p{color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* buttons */
+.btn,.ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 .95rem/1 var(--body);text-decoration:none;border-radius:8px;padding:11px 16px;cursor:pointer;border:1.5px solid transparent;transition:transform .15s ease,background-color .15s ease}
+.btn{background:var(--cool);color:var(--on-cool)}
+.btn:hover{transform:translateY(-1px)}
+.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.ghost:hover{border-color:var(--cool);color:var(--cool)}
+.big{padding:14px 20px;font-size:1rem}
+
+/* header */
+.top{padding-block:14px;border-bottom:1px solid var(--line);background:var(--bg)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.brand svg{color:var(--cool);flex:none}
+.brand-name{font-family:var(--display);font-stretch:118%;font-weight:800;font-size:1.12rem;letter-spacing:-.01em;line-height:1.1}
+.brand-name small{display:block;font-family:var(--mono);font-stretch:100%;font-weight:400;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.top-actions{display:flex;gap:8px;align-items:center}
+.top-actions .ghost,.top-actions .btn{padding:9px 13px;font-size:.88rem}
+
+/* hero */
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(32px,5vw,64px);align-items:center}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero-copy .lede{font-size:1.12rem;color:var(--muted);max-width:52ch}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.trust{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px}
+.trust li{display:flex;gap:10px;align-items:baseline;font-size:.95rem}
+.trust li::before{content:"";flex:none;width:8px;height:8px;border-radius:2px;background:var(--cool);transform:translateY(-1px)}
+
+.readout{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:18px;min-width:0}
+.ro-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}
+.ro-row{display:grid;gap:8px}
+.ro-top{display:flex;justify-content:space-between;align-items:baseline}
+.ro-temp{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:2.1rem;font-weight:500;line-height:1}
+.ro-temp.hot{color:var(--heat)}
+.ro-temp.cold{color:var(--cool)}
+.ro-temp sup{font-size:.9rem;vertical-align:top;margin-left:2px}
+.track{height:12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.fill{height:100%;border-radius:999px}
+.fill.hot{width:88%;background:linear-gradient(90deg,var(--cool),var(--warm) 55%,var(--heat))}
+.fill.cold{width:58.7%;background:var(--cool)}
+.ro-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:-8px}
+.ro-delta{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px dashed var(--line);padding-top:14px}
+.ro-delta strong{font-family:var(--mono);font-size:1.3rem;font-weight:500;color:var(--cool)}
+.ro-cap{font-size:.86rem;color:var(--muted)}
+
+/* services */
+.svc-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,48px) clamp(28px,5vw,64px)}
+.svc-group{display:grid;gap:4px;min-width:0;align-content:start}
+.svc-group h3{padding-bottom:10px;border-bottom:2px solid var(--ink);margin-bottom:4px}
+.svc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 14px;padding-block:12px;border-bottom:1px solid var(--line)}
+.svc-name{font-weight:600;display:flex;align-items:baseline;gap:8px;min-width:0}
+.svc-name::after{content:"";flex:1;border-bottom:1px dotted var(--line);transform:translateY(-4px);min-width:16px}
+.svc-price{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap;text-align:right}
+.svc-price small{display:block;font-size:.7rem;color:var(--muted);font-weight:400}
+.svc-note{grid-column:1/-1;font-size:.88rem;color:var(--muted)}
+.fine{margin-top:clamp(28px,4vw,40px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.fine div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:4px}
+.fine strong{font-size:.95rem}
+.fine span{font-size:.88rem;color:var(--muted)}
+
+/* quote builder */
+.quote-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
+.q-list{display:grid;gap:6px;margin:0;padding:0;border:0}
+.q-list legend{margin-bottom:10px}
+.q-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;transition:border-color .15s ease,background-color .15s ease}
+.q-item:hover{border-color:var(--cool)}
+.q-item:has(input:checked){border-color:var(--cool);background:var(--cool-soft)}
+.q-item input{width:18px;height:18px;accent-color:var(--cool);margin:0}
+.q-item .num{font-size:.9rem;white-space:nowrap}
+.q-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.field{display:grid;gap:6px;min-width:0}
+.field input,.field select{font:inherit;font-size:.95rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:16px;min-width:0}
+.total{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.total .num{font-size:2.2rem;font-weight:500;line-height:1}
+.total .parts{font-size:.9rem;color:var(--muted)}
+.msg{font-family:var(--mono);font-size:.84rem;line-height:1.5;white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;width:100%;min-height:9.5em;resize:vertical;color:var(--ink)}
+.copy-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.status{font-size:.88rem;color:var(--cool)}
+.summary .hint{font-size:.86rem;color:var(--muted)}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,3vw,28px);counter-reset:step}
+.steps li{display:grid;gap:10px;align-content:start;counter-increment:step;min-width:0}
+.steps li::before{content:counter(step,decimal-leading-zero);font-family:var(--mono);font-size:.8rem;color:var(--cool);border-top:2px solid var(--cool);padding-top:10px}
+.steps p{color:var(--muted);font-size:.95rem}
+.mailin{margin-top:clamp(28px,4vw,40px);display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;padding:16px 18px;border:1px dashed var(--line);border-radius:10px}
+.mailin p{color:var(--muted);font-size:.95rem;min-width:0;flex:1 1 280px}
+
+/* about + faq */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(32px,5vw,64px);align-items:start}
+.about{display:grid;gap:16px;max-width:60ch}
+.about p{color:var(--muted)}
+.about p:first-of-type{color:var(--ink);font-size:1.08rem}
+.faq{display:grid}
+.faq details{border-bottom:1px solid var(--line);padding-block:14px}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);color:var(--cool);flex:none}
+.faq details[open] summary::after{content:"\2013"}
+.faq details p{color:var(--muted);margin-top:8px;max-width:62ch}
+
+/* contact */
+.contact{background:var(--cool-soft)}
+.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.c-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:10px;align-content:start;min-width:0}
+.c-value{font-family:var(--mono);font-size:1.02rem;user-select:all;overflow-wrap:anywhere}
+.c-value.pending{color:var(--muted);font-style:italic;user-select:auto}
+.c-card .ghost{justify-self:start;padding:8px 12px;font-size:.85rem}
+.foot{padding-block:28px;font-size:.85rem;color:var(--muted)}
+.foot .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:860px){
+  .hero-grid,.quote-grid,.split{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fine,.contact-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .svc-groups,.trust,.q-fields,.steps{grid-template-columns:minmax(0,1fr)}
+  .top-actions .btn{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap top-row">
+    <a class="brand" href="#top" aria-label="Second Wind Laptop Care">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g fill="currentColor">
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(120 16 16)"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(240 16 16)"/>
+        </g>
+        <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
+      </svg>
+      <span class="brand-name"><span class="en">Second Wind</span><span class="zh">凉芯电脑</span><small><span class="en">Laptop Care</span><span class="zh">Second Wind Laptop Care</span></small></span>
+    </a>
+    <div class="top-actions">
+      <button class="ghost" id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button>
+      <a class="btn" href="#quote"><span class="en">Get a quote</span><span class="zh">获取报价</span></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="band hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="label"><span class="en">Laptop cleaning, repair &amp; upgrades · Ann Arbor &amp; Novi</span><span class="zh">笔记本清灰 · 维修 · 升级 · 安娜堡 &amp; Novi</span></p>
+        <h1><span class="en">Hot, loud or slow? Give your laptop a second wind.</span><span class="zh">发烫、风扇吵、卡顿？让你的电脑重新凉下来。</span></h1>
+        <p class="lede"><span class="en">I clean, repair and upgrade Windows and gaming laptops, with free pickup nearby. Every cleaning comes with a before-and-after temperature test, so you can see exactly what changed.</span><span class="zh">游戏本和 Windows 笔记本的清灰、维修和升级，附近免费上门取送。每次清灰都会做前后温度对比测试，效果一目了然。</span></p>
+        <div class="cta-row">
+          <a class="btn big" href="#quote"><span class="en">Build a quote</span><span class="zh">在线估价</span></a>
+          <a class="ghost big" href="#services"><span class="en">See prices</span><span class="zh">查看价格</span></a>
+        </div>
+        <ul class="trust">
+          <li><span class="en">Free pickup within 10 miles</span><span class="zh">10 英里内免费取送</span></li>
+          <li><span class="en">30-day warranty on labor</span><span class="zh">人工保修 30 天</span></li>
+          <li><span class="en">Free diagnosis if I do the repair</span><span class="zh">修好才收检测费</span></li>
+          <li><span class="en">English and 中文</span><span class="zh">中英文都可以沟通</span></li>
+        </ul>
+      </div>
+
+      <aside class="readout" aria-label="Example before-and-after temperature readout">
+        <div class="ro-head">
+          <span class="label"><span class="en">CPU · 10-minute load test</span><span class="zh">CPU · 10 分钟满载测试</span></span>
+          <span class="tag"><span class="en">EXAMPLE</span><span class="zh">示例</span></span>
+        </div>
+        <div class="ro-row">
+          <div class="ro-top"><span class="label"><span class="en">Before cleaning</span><span class="zh">清灰前</span></span><span class="ro-temp hot">96<sup>°C</sup></span></div>
+          <div class="track"><div class="fill hot"></div></div>
+        </div>
+        <div class="ro-row">
+          <div class="ro-top"><span class="label"><span class="en">After cleaning + PTM pads</span><span class="zh">清灰 + 相变片后</span></span><span class="ro-temp cold">74<sup>°C</sup></span></div>
+          <div class="track"><div class="fill cold"></div></div>
+        </div>
+        <div class="ro-scale"><span>30 °C</span><span>105 °C</span></div>
+        <div class="ro-delta">
+          <span class="label"><span class="en">Difference</span><span class="zh">降温</span></span>
+          <strong>−22 °C</strong>
+        </div>
+        <p class="ro-cap"><span class="en">Illustrative numbers. Results vary by laptop. You get your own before-and-after screenshots with every cleaning.</span><span class="zh">示例数据，实际效果因机型而异。每次清灰都会给你前后对比截图。</span></p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">Price list</span><span class="zh">价格表</span></p>
+        <h2><span class="en">Clear prices, labor plus parts</span><span class="zh">价格透明：人工费 + 配件费</span></h2>
+        <p><span class="en">Prices below are my labor. Parts are billed at cost, and I quote them before ordering anything.</span><span class="zh">以下是人工费。配件按成本价收取，下单前会先报价确认。</span></p>
+      </div>
+      <div class="svc-groups" id="svcGroups"></div>
+      <div class="fine">
+        <div><strong><span class="en">Diagnosis</span><span class="zh">检测</span></strong><span><span class="en">Free if I do the repair, $20 if not.</span><span class="zh">维修则免费，不修收 $20。</span></span></div>
+        <div><strong><span class="en">Parts deposit</span><span class="zh">配件定金</span></strong><span><span class="en">Paid before I order a part, credited to your bill.</span><span class="zh">订配件前先付定金，最后从总价中扣除。</span></span></div>
+        <div><strong><span class="en">Pickup &amp; drop-off</span><span class="zh">上门取送</span></strong><span><span class="en">Free within 10 miles, or meet on campus.</span><span class="zh">10 英里内免费，也可以在校园见面交接。</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="quote">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">Quote builder</span><span class="zh">在线估价</span></p>
+        <h2><span class="en">Pick what you need, then send me the message</span><span class="zh">选好服务，把信息发给我</span></h2>
+        <p><span class="en">Choose services and add your laptop model. Copy the message and text it to me, and I'll confirm the final price.</span><span class="zh">勾选需要的服务并填写电脑型号，复制下面的信息发给我，我会确认最终价格。</span></p>
+      </div>
+      <div class="quote-grid">
+        <div>
+          <fieldset class="q-list" id="qList">
+            <legend class="label"><span class="en">Services</span><span class="zh">服务项目</span></legend>
+          </fieldset>
+          <div class="q-fields">
+            <label class="field" for="qModel">
+              <span class="label"><span class="en">Laptop model</span><span class="zh">电脑型号</span></span>
+              <input id="qModel" type="text" autocomplete="off" placeholder="e.g. Lenovo Legion 5 Pro">
+            </label>
+            <label class="field" for="qHandoff">
+              <span class="label"><span class="en">Hand-off</span><span class="zh">交接方式</span></span>
+              <select id="qHandoff"></select>
+            </label>
+          </div>
+        </div>
+        <div class="summary" aria-live="polite">
+          <div class="total">
+            <span class="label"><span class="en">Estimated labor</span><span class="zh">预估人工费</span></span>
+            <span><span class="num" id="qTotal">$60</span> <span class="parts" id="qParts"></span></span>
+          </div>
+          <label class="field" for="qMsg">
+            <span class="label"><span class="en">Your message</span><span class="zh">要发送的信息</span></span>
+            <textarea class="msg" id="qMsg" readonly></textarea>
+          </label>
+          <div class="copy-row">
+            <button class="btn" type="button" id="copyMsg"><span class="en">Copy message</span><span class="zh">复制信息</span></button>
+            <span class="status" id="copyStatus" role="status"></span>
+          </div>
+          <p class="hint"><span class="en">Then send it by text or WeChat. Contact details are at the bottom of the page.</span><span class="zh">然后通过短信或微信发给我，联系方式在页面底部。</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">How it works</span><span class="zh">服务流程</span></p>
+        <h2><span class="en">From quote to cooler laptop</span><span class="zh">从报价到修好</span></h2>
+      </div>
+      <ol class="steps">
+        <li><h3><span class="en">Get a quote</span><span class="zh">获取报价</span></h3><p><span class="en">Use the quote builder, or text me your laptop model and what's wrong.</span><span class="zh">用上面的估价工具，或直接把电脑型号和问题发给我。</span></p></li>
+        <li><h3><span class="en">Hand it off</span><span class="zh">交接电脑</span></h3><p><span class="en">I pick it up or we meet on campus. We check that it works and photograph its condition together.</span><span class="zh">我上门取件或校园见面。交接时一起检查功能，并拍照记录外观。</span></p></li>
+        <li><h3><span class="en">I fix it</span><span class="zh">维修</span></h3><p><span class="en">I give you a time estimate before starting, and tell you before doing anything that changes the price.</span><span class="zh">开始前告诉你预计时间，任何会改变价格的操作都会先问你。</span></p></li>
+        <li><h3><span class="en">Get it back</span><span class="zh">取回电脑</span></h3><p><span class="en">You get your before-and-after temps, then pay by Venmo, Zelle or cash.</span><span class="zh">交付时附上前后温度对比，可以用 Venmo、Zelle 或现金付款。</span></p></li>
+      </ol>
+      <div class="mailin">
+        <span class="label"><span class="en">Coming soon</span><span class="zh">即将推出</span></span>
+        <p><span class="en">Mail-in service for customers outside the area. Ship your laptop to me insured, and I ship it back when it's done.</span><span class="zh">外地邮寄维修：把电脑保价寄给我，修好后寄回。</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="about">
+    <div class="wrap split">
+      <div class="about">
+        <p class="label"><span class="en">Who's fixing it</span><span class="zh">关于我</span></p>
+        <h2><span class="en">An engineering student with a careful hand</span><span class="zh">认真细心的工科学生</span></h2>
+        <p><span class="en">Hi, I'm Jie. I study electrical and computer engineering at the University of Michigan.</span><span class="zh">你好，我是 Jie，在密歇根大学读电子与计算机工程。</span></p>
+        <p><span class="en">I've been opening up and repairing my own laptops for years, including a full thermal rebuild of a high-end gaming laptop. I've also programmed an industrial robot arm on a factory production line. Most laptops don't need replacing. They need a careful cleaning or one new part, and that's what I do.</span><span class="zh">我自己拆修笔记本很多年了，包括给高端游戏本重新做散热。我也在工厂产线上给工业机械臂写过程序。大多数电脑其实不用换新，只需要认真清理一次或换一个配件，这正是我做的事。</span></p>
+      </div>
+      <div class="faq">
+        <p class="label" style="margin-bottom:12px"><span class="en">Questions</span><span class="zh">常见问题</span></p>
+        <details>
+          <summary><span><span class="en">Do you need my password?</span><span class="zh">需要我的开机密码吗？</span></span></summary>
+          <p><span class="en">No. I test with my own bootable USB drive, so your account stays private. Please back up important files before any repair.</span><span class="zh">不需要。我用自己的启动 U 盘做测试，不会碰你的账户。维修前请备份重要资料。</span></p>
+        </details>
+        <details>
+          <summary><span><span class="en">What if something goes wrong?</span><span class="zh">如果修坏了怎么办？</span></span></summary>
+          <p><span class="en">We check and photograph your laptop together before I start. If I damage something, I repair it or pay for it.</span><span class="zh">开始前我们会一起检查并拍照记录。如果是我造成的损坏，我负责修好或赔偿。</span></p>
+        </details>
+        <details>
+          <summary><span><span class="en">Which laptops do you work on?</span><span class="zh">修哪些电脑？</span></span></summary>
+          <p><span class="en">Windows laptops, including gaming laptops from Dell and Alienware, Lenovo, ASUS, MSI, HP and Acer. I don't take MacBooks yet.</span><span class="zh">Windows 笔记本，包括戴尔/外星人、联想、华硕、微星、惠普、宏碁等品牌的游戏本。暂时不修 MacBook。</span></p>
+        </details>
+        <details>
+          <summary><span><span class="en">How do I pay?</span><span class="zh">怎么付款？</span></span></summary>
+          <p><span class="en">After the work is done, by Venmo, Zelle or cash. Jobs that need a part take a deposit before I order it.</span><span class="zh">修好后用 Venmo、Zelle 或现金付款。需要买配件的，订货前先付定金。</span></p>
+        </details>
+        <details>
+          <summary><span><span class="en">Where do you serve?</span><span class="zh">服务范围？</span></span></summary>
+          <p><span class="en">Ann Arbor, Ypsilanti and Novi. Pickup is free within 10 miles, or we can meet on campus.</span><span class="zh">安娜堡、Ypsilanti 和 Novi。10 英里内免费上门，也可以在校园见面。</span></p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band contact" id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">Contact</span><span class="zh">联系我</span></p>
+        <h2><span class="en">Text me, WeChat me, or book online</span><span class="zh">短信、微信或在线预约</span></h2>
+        <p><span class="en">I usually reply the same day.</span><span class="zh">一般当天回复。</span></p>
+      </div>
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Second Wind Laptop Care · 凉芯电脑 · Ann Arbor &amp; Novi, Michigan</span>
+    <span><span class="en">Independent service. Not affiliated with the University of Michigan.</span><span class="zh">个人独立经营，与密歇根大学无关。</span></span>
+  </div>
+</footer>
+
+<script>
+/* ---------- Edit these to update the site ---------- */
+const CONTACT = {
+  phone: "",       // Google Voice number, e.g. "(734) 555-0123"
+  wechat: "",      // WeChat ID
+  bookingUrl: ""   // Google Form link
+};
+
+const GROUPS = [
+  { id: "cool",  en: "Cleaning & cooling", zh: "清灰散热" },
+  { id: "up",    en: "Upgrades",           zh: "升级" },
+  { id: "parts", en: "Part replacement",   zh: "更换配件" },
+  { id: "soft",  en: "Software",           zh: "系统软件" }
+];
+
+const SERVICES = [
+  { id: "clean",    g: "cool",  labor: 60, parts: false, en: "Deep clean + thermal paste", zh: "深度清灰 + 换硅脂",
+    nEn: "Fans, heatsinks and vents, with a before-and-after temp test.", nZh: "清理风扇、散热片和出风口，附前后温度测试。" },
+  { id: "ptm",      g: "cool",  labor: 80, parts: false, en: "Deep clean + PTM pads", zh: "深度清灰 + 换相变片",
+    nEn: "Lasts longer than paste. Best for gaming laptops.", nZh: "比硅脂更耐用，适合游戏本。" },
+  { id: "fan",      g: "cool",  labor: 40, parts: true,  en: "Fan replacement", zh: "更换风扇",
+    nEn: "For grinding, rattling or dead fans.", nZh: "风扇异响、摩擦或不转。" },
+  { id: "ram",      g: "up",    labor: 30, parts: true,  en: "RAM or SSD install", zh: "加内存 / 装固态",
+    nEn: "Bring your own part, or I can source one.", nZh: "可以自带配件，也可以帮你买。" },
+  { id: "clone",    g: "up",    labor: 50, parts: true,  en: "SSD upgrade with full clone", zh: "换固态 + 完整迁移",
+    nEn: "Keeps all your files, apps and settings.", nZh: "系统、软件和资料原样保留。" },
+  { id: "wifi",     g: "up",    labor: 30, parts: true,  en: "Wi-Fi card upgrade", zh: "升级无线网卡",
+    nEn: "I check compatibility with your model first.", nZh: "先确认和你的机型兼容。" },
+  { id: "battery",  g: "parts", labor: 40, parts: true,  en: "Battery replacement", zh: "更换电池",
+    nEn: "OEM or reputable brands only.", nZh: "只用原厂或可靠品牌。" },
+  { id: "screen",   g: "parts", labor: 60, parts: true,  en: "Screen replacement", zh: "更换屏幕",
+    nEn: "Matched to your exact panel part number.", nZh: "按原屏型号精确匹配。" },
+  { id: "keyboard", g: "parts", labor: 50, parts: true,  en: "Keyboard replacement", zh: "更换键盘",
+    nEn: "Quoted first if it's built into the top cover.", nZh: "如果键盘和 C 壳一体，先单独报价。" },
+  { id: "speaker",  g: "parts", labor: 40, parts: true,  en: "Speaker replacement", zh: "更换喇叭",
+    nEn: "For crackling, distorted or silent speakers.", nZh: "喇叭破音、杂音或没声音。" },
+  { id: "port",     g: "parts", labor: 50, parts: true,  en: "Charging port", zh: "更换充电口",
+    nEn: "Cable and daughterboard types.", nZh: "排线式或小板式充电口。" },
+  { id: "windows",  g: "soft",  labor: 50, parts: false, en: "Windows reinstall / tune-up", zh: "重装系统 / 优化",
+    nEn: "Back up your files first.", nZh: "请先备份资料。" },
+  { id: "malware",  g: "soft",  labor: 50, parts: false, en: "Malware removal", zh: "清除病毒",
+    nEn: "Scan, cleanup and security settings.", nZh: "扫描、清理并设置安全防护。" }
+];
+
+const HANDOFF = [
+  { v: "pickup", en: "Pickup and drop-off", zh: "上门取送" },
+  { v: "campus", en: "Meet on campus", zh: "校园见面" }
+];
+/* --------------------------------------------------- */
+
+const root = document.documentElement;
+let lang = "en";
+const t = (o, en = "en", zh = "zh") => (lang === "zh" ? o[zh] : o[en]);
+const both = (en, zh) => `<span class="en">${en}</span><span class="zh">${zh}</span>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function priceHTML(s) {
+  return `$${s.labor}` + (s.parts ? `<small>${both("+ parts", "+ 配件")}</small>` : "");
+}
+
+function renderServices() {
+  document.getElementById("svcGroups").innerHTML = GROUPS.map(g => `
+    <div class="svc-group">
+      <h3>${both(g.en, g.zh)}</h3>
+      ${SERVICES.filter(s => s.g === g.id).map(s => `
+        <div class="svc">
+          <span class="svc-name">${both(s.en, s.zh)}</span>
+          <span class="svc-price">${priceHTML(s)}</span>
+          <span class="svc-note">${both(s.nEn, s.nZh)}</span>
+        </div>`).join("")}
+    </div>`).join("");
+}
+
+function renderQuoteList() {
+  const list = document.getElementById("qList");
+  list.insertAdjacentHTML("beforeend", SERVICES.map(s => `
+    <label class="q-item" for="q-${s.id}">
+      <input type="checkbox" id="q-${s.id}" value="${s.id}"${s.id === "clean" ? " checked" : ""}>
+      <span>${both(s.en, s.zh)}</span>
+      <span class="num">$${s.labor}${s.parts ? both(" + parts", " + 配件") : ""}</span>
+    </label>`).join(""));
+  list.addEventListener("change", updateQuote);
+  document.getElementById("qModel").addEventListener("input", updateQuote);
+  document.getElementById("qHandoff").addEventListener("change", updateQuote);
+}
+
+function renderHandoff() {
+  const sel = document.getElementById("qHandoff");
+  const cur = sel.value || "pickup";
+  sel.innerHTML = HANDOFF.map(h => `<option value="${h.v}">${esc(t(h))}</option>`).join("");
+  sel.value = cur;
+}
+
+function updateQuote() {
+  const picked = SERVICES.filter(s => document.getElementById("q-" + s.id).checked);
+  const total = picked.reduce((a, s) => a + s.labor, 0);
+  const needsParts = picked.some(s => s.parts);
+  const model = document.getElementById("qModel").value.trim();
+  const handoff = HANDOFF.find(h => h.v === document.getElementById("qHandoff").value) || HANDOFF[0];
+
+  document.getElementById("qTotal").textContent = "$" + total;
+  document.getElementById("qParts").textContent = needsParts ? (lang === "zh" ? "+ 配件费" : "+ parts") : "";
+
+  const names = picked.map(s => t(s)).join(lang === "zh" ? "、" : ", ");
+  let msg;
+  if (lang === "zh") {
+    msg = `你好，我想咨询维修报价。\n电脑型号：${model || "（请填写型号）"}\n服务：${names || "（还没选）"}\n预估人工费：$${total}${needsParts ? " + 配件费" : ""}\n交接方式：${handoff.zh}\n问题描述：`;
+  } else {
+    msg = `Hi! I'd like a quote.\nLaptop: ${model || "(add your model)"}\nServices: ${names || "(none picked yet)"}\nEstimated labor: $${total}${needsParts ? " + parts" : ""}\nHand-off: ${handoff.en}\nWhat's wrong: `;
+  }
+  document.getElementById("qMsg").value = msg;
+  document.getElementById("copyStatus").textContent = "";
+}
+
+function copyText(text, statusEl, fallbackEl) {
+  const done = ok => {
+    if (!statusEl) return;
+    statusEl.textContent = ok
+      ? (lang === "zh" ? "已复制" : "Copied")
+      : (lang === "zh" ? "已选中，请按复制" : "Selected. Press Copy on your keyboard.");
+  };
+  const fallback = () => {
+    if (fallbackEl) {
+      if (fallbackEl.select) { fallbackEl.focus(); fallbackEl.select(); }
+      else { const r = document.createRange(); r.selectNodeContents(fallbackEl); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    }
+    done(false);
+  };
+  try {
+    navigator.clipboard.writeText(text).then(() => done(true), fallback);
+  } catch (e) { fallback(); }
+}
+
+function renderContact() {
+  const items = [
+    { key: "phone",  en: "Text or call", zh: "短信 / 电话", val: CONTACT.phone,
+      pEn: "Number coming soon", pZh: "号码即将更新" },
+    { key: "wechat", en: "WeChat", zh: "微信", val: CONTACT.wechat,
+      pEn: "WeChat ID coming soon", pZh: "微信号即将更新" },
+    { key: "book",   en: "Book online", zh: "在线预约", val: CONTACT.bookingUrl,
+      pEn: "Booking form coming soon", pZh: "预约表即将上线", link: true }
+  ];
+  const grid = document.getElementById("contactGrid");
+  grid.innerHTML = items.map(i => {
+    if (!i.val) {
+      return `<div class="c-card"><span class="label">${both(i.en, i.zh)}</span><span class="c-value pending">${both(i.pEn, i.pZh)}</span></div>`;
+    }
+    if (i.link) {
+      return `<div class="c-card"><span class="label">${both(i.en, i.zh)}</span><a class="btn" href="${esc(i.val)}" target="_blank" rel="noopener">${both("Open booking form", "打开预约表")}</a></div>`;
+    }
+    return `<div class="c-card"><span class="label">${both(i.en, i.zh)}</span><span class="c-value" id="cv-${i.key}">${esc(i.val)}</span>
+      <button class="ghost" type="button" data-copy="${i.key}">${both("Copy", "复制")}</button><span class="status" id="cs-${i.key}" role="status"></span></div>`;
+  }).join("");
+  grid.addEventListener("click", e => {
+    const b = e.target.closest("[data-copy]");
+    if (!b) return;
+    const k = b.dataset.copy;
+    copyText(CONTACT[k], document.getElementById("cs-" + k), document.getElementById("cv-" + k));
+  });
+}
+
+function setLang(next) {
+  lang = next;
+  root.dataset.lang = next;
+  root.lang = next === "zh" ? "zh-CN" : "en";
+  document.getElementById("langBtn").textContent = next === "zh" ? "English" : "中文";
+  renderHandoff();
+  updateQuote();
+  try { localStorage.setItem("sw-lang", next); } catch (e) {}
+}
+
+renderServices();
+renderQuoteList();
+renderContact();
+let saved = "en";
+try { saved = localStorage.getItem("sw-lang") || "en"; } catch (e) {}
+setLang(saved === "zh" ? "zh" : "en");
+
+document.getElementById("langBtn").addEventListener("click", () => setLang(lang === "zh" ? "en" : "zh"));
+document.getElementById("copyMsg").addEventListener("click", () => {
+  copyText(document.getElementById("qMsg").value, document.getElementById("copyStatus"), document.getElementById("qMsg"));
+});
+</script>
+</body>
+</html>
