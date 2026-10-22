@@ -165,7 +165,7 @@ p{margin:0}
 
 /* contact */
 .contact{background:var(--cool-soft)}
-.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
 .c-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:10px;align-content:start;min-width:0}
 .c-value{font-family:var(--mono);font-size:1.02rem;user-select:all;overflow-wrap:anywhere}
 .c-value.pending{color:var(--muted);font-style:italic;user-select:auto}
@@ -223,7 +223,7 @@ table.cmp{border-collapse:collapse;width:100%;min-width:600px;font-size:.9rem}
 @media (max-width:860px){
   .hero-grid,.quote-grid,.split,.finder{grid-template-columns:minmax(0,1fr)}
   .steps,.tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .fine,.contact-grid{grid-template-columns:minmax(0,1fr)}
+  .fine{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:620px){
   .svc-groups,.trust,.steps,.tiers{grid-template-columns:minmax(0,1fr)}
@@ -475,8 +475,9 @@ table.cmp{border-collapse:collapse;width:100%;min-width:600px;font-size:.9rem}
 /* ================= Edit these to update the site ================= */
 
 const CONTACT = {
-  phone: "",       // Google Voice number, e.g. "(734) 555-0123"
-  wechat: "",      // WeChat ID
+  phone: "(734) 508-2592",
+  email: "swcomputercare@gmail.com",
+  wechat: "RiseeH_",
   bookingUrl: ""   // Google Form link
 };
 
@@ -848,6 +849,8 @@ function renderContact() {
   const items = [
     { key: "phone",  en: "Text or call", zh: "短信 / 电话", val: CONTACT.phone,
       pEn: "Number coming soon", pZh: "号码即将更新" },
+    { key: "email",  en: "Email", zh: "邮箱", val: CONTACT.email,
+      pEn: "Email coming soon", pZh: "邮箱即将更新" },
     { key: "wechat", en: "WeChat", zh: "微信", val: CONTACT.wechat,
       pEn: "WeChat ID coming soon", pZh: "微信号即将更新" },
     { key: "book",   en: "Book online", zh: "在线预约", val: CONTACT.bookingUrl,
