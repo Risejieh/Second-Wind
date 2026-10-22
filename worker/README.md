@@ -12,7 +12,7 @@ It runs free on Cloudflare Workers. The API key lives on Cloudflare, never in th
 | AI checks for the whole site per day | 200 | `DAILY_LIMIT` in `wrangler.toml` |
 | Website allowed to call it | `https://risejieh.github.io` | `ALLOWED_ORIGINS` in `wrangler.toml` |
 
-Answers are cached for 30 days, so a model someone already checked is free and doesn't use up a visitor's checks. IP addresses are stored only as salted hashes and are deleted after 24 hours. When a visitor runs out, or the AI is down, the site falls back to its built-in keyword check.
+Visitor and daily counts are kept in Durable Objects, which count exactly, so quick repeated requests can't get past the limit. Answers are cached in KV for 30 days, so a model someone already checked is free and doesn't use up a visitor's checks. IP addresses are only used as salted hashes, and their counts are deleted when the 24 hours are up. When a visitor runs out, or the AI is down, the site falls back to its built-in keyword check.
 
 ## Cost
 

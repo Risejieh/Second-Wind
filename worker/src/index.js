@@ -6,10 +6,14 @@
 //   - Only your website's address may call it (ALLOWED_ORIGINS).
 //   - Each visitor (by IP address) gets PER_IP_LIMIT AI checks per 24 hours.
 //   - The whole site gets at most DAILY_LIMIT AI checks per day.
-//   - Answers are cached for 30 days, so a repeated model costs nothing and doesn't use up a visitor's checks.
-//   - IP addresses are stored only as salted hashes and expire after 24 hours.
+//   - Counts are kept in Durable Objects, which count exactly, so fast repeated requests can't slip through.
+//   - Answers are cached for 30 days in KV, so a repeated model costs nothing and doesn't use up a visitor's checks.
+//   - IP addresses are only used as salted hashes, and their counts are deleted when the 24 hours are up.
+
+import { DurableObject } from "cloudflare:workers";
 
 const TIERS = ["std", "gam", "pre", "pc", "mac", "unknown"];
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const SYSTEM = `You sort computers for a small laptop and PC repair service. The price depends on how hard the computer is to open, clean and repair. Put the computer the customer names into exactly one tier:
 
@@ -39,6 +43,45 @@ const SCHEMA = {
   additionalProperties: false
 };
 
+// One small counter per visitor (and one per day for the whole site).
+// Calls to the same counter run one at a time, so the count is always exact.
+export class Counter extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+  }
+
+  // Use up one check if any are left in the current window.
+  async take(limit, windowMs) {
+    const now = Date.now();
+    let s = await this.ctx.storage.get("s");
+    if (!s || now >= s.reset) s = { n: 0, reset: now + windowMs };
+    if (s.n >= limit) return { ok: false, used: s.n };
+    s.n += 1;
+    await this.ctx.storage.put("s", s);
+    await this.ctx.storage.setAlarm(s.reset);
+    return { ok: true, used: s.n };
+  }
+
+  // Give a check back (used when the AI call fails).
+  async refund() {
+    const s = await this.ctx.storage.get("s");
+    if (s && s.n > 0) {
+      s.n -= 1;
+      await this.ctx.storage.put("s", s);
+    }
+  }
+
+  async used() {
+    const s = await this.ctx.storage.get("s");
+    return s && Date.now() < s.reset ? s.n : 0;
+  }
+
+  // When the window ends, forget this counter entirely.
+  async alarm() {
+    await this.ctx.storage.deleteAll();
+  }
+}
+
 export default {
   async fetch(request, env) {
     const allowed = (env.ALLOWED_ORIGINS || "").split(",").map(s => s.trim()).filter(Boolean);
@@ -56,7 +99,8 @@ export default {
     if (request.method !== "POST") return reply({ error: "method" }, 405);
     if (!allowed.includes(origin)) return reply({ error: "origin" }, 403);
     if (!env.KV) return reply({ error: "setup_kv" }, 500);
-    if (!env.ANTHROPIC_API_KEY) return reply({ error: "setup_key", settings_found: Object.keys(env).sort() }, 500);
+    if (!env.COUNTER) return reply({ error: "setup_counter" }, 500);
+    if (!env.ANTHROPIC_API_KEY) return reply({ error: "setup_key" }, 500);
 
     let body;
     try { body = await request.json(); } catch { return reply({ error: "bad_request" }, 400); }
@@ -66,21 +110,29 @@ export default {
     const perIp = Number(env.PER_IP_LIMIT || 2);
     const perDay = Number(env.DAILY_LIMIT || 200);
     const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-    const ipKey = "ip:" + (await sha256((env.IP_SALT || "second-wind") + ip)).slice(0, 32);
-    const used = Number(await env.KV.get(ipKey)) || 0;
+    const ipName = "ip:" + (await sha256((env.IP_SALT || "second-wind") + ip)).slice(0, 32);
+    const counter = name => env.COUNTER.get(env.COUNTER.idFromName(name));
+    const visitor = counter(ipName);
 
     // 1. Cached answer: free, and doesn't use up the visitor's checks.
     const cacheKey = "c:" + model.toLowerCase();
     const cached = await env.KV.get(cacheKey, "json");
-    if (cached) return reply({ ...cached, cached: true, remaining: Math.max(0, perIp - used) });
+    if (cached) {
+      const used = await visitor.used();
+      return reply({ ...cached, cached: true, remaining: Math.max(0, perIp - used) });
+    }
 
-    // 2. Limits.
-    if (used >= perIp) return reply({ error: "limit", remaining: 0 }, 429);
-    const dayKey = "day:" + new Date().toISOString().slice(0, 10);
-    const today = Number(await env.KV.get(dayKey)) || 0;
-    if (today >= perDay) return reply({ error: "busy" }, 503);
+    // 2. Limits: reserve one check for this visitor and one for the site today.
+    const mine = await visitor.take(perIp, DAY_MS);
+    if (!mine.ok) return reply({ error: "limit", remaining: 0 }, 429);
+    const site = counter("day:" + new Date().toISOString().slice(0, 10));
+    const today = await site.take(perDay, 2 * DAY_MS);
+    if (!today.ok) {
+      await visitor.refund();
+      return reply({ error: "busy" }, 503);
+    }
 
-    // 3. Ask Claude.
+    // 3. Ask Claude. If it fails, give both checks back.
     let result;
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -98,27 +150,21 @@ export default {
           output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } }
         })
       });
-      if (!res.ok) {
-        console.log("Anthropic API error", res.status, await res.text());
-        return reply({ error: "ai_failed" }, 502);
-      }
+      if (!res.ok) throw new Error(`Anthropic API ${res.status}: ${await res.text()}`);
       const data = await res.json();
-      if (data.stop_reason !== "end_turn") return reply({ error: "ai_failed" }, 502);
+      if (data.stop_reason !== "end_turn") throw new Error("stop_reason " + data.stop_reason);
       const text = (data.content || []).find(b => b.type === "text");
       result = JSON.parse(text.text);
       if (!TIERS.includes(result.tier)) throw new Error("bad tier");
     } catch (err) {
       console.log("AI check failed", String(err));
+      await Promise.all([visitor.refund(), site.refund()]);
       return reply({ error: "ai_failed" }, 502);
     }
 
-    // 4. Count it and cache it. Failed calls above are never counted.
-    await Promise.all([
-      env.KV.put(ipKey, String(used + 1), { expirationTtl: 86400 }),
-      env.KV.put(dayKey, String(today + 1), { expirationTtl: 172800 }),
-      env.KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 2592000 })
-    ]);
-    return reply({ ...result, cached: false, remaining: Math.max(0, perIp - used - 1) });
+    // 4. Cache the answer for 30 days.
+    await env.KV.put(cacheKey, JSON.stringify(result), { expirationTtl: 2592000 });
+    return reply({ ...result, cached: false, remaining: Math.max(0, perIp - mine.used) });
   }
 };
 
