@@ -55,7 +55,8 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     if (request.method !== "POST") return reply({ error: "method" }, 405);
     if (!allowed.includes(origin)) return reply({ error: "origin" }, 403);
-    if (!env.KV || !env.ANTHROPIC_API_KEY) return reply({ error: "setup" }, 500);
+    if (!env.KV) return reply({ error: "setup_kv" }, 500);
+    if (!env.ANTHROPIC_API_KEY) return reply({ error: "setup_key" }, 500);
 
     let body;
     try { body = await request.json(); } catch { return reply({ error: "bad_request" }, 400); }
