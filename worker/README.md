@@ -46,7 +46,7 @@ You need [Node.js](https://nodejs.org) installed.
    npx wrangler deploy
    ```
 
-   It prints your Worker's address, like `https://second-wind-ai.yourname.workers.dev`.
+   It prints your Worker's address, like `https://second-wind.yourname.workers.dev`.
 6. **Connect the website.** In `index.html`, find `const AI_ENDPOINT = "";` and paste the address between the quotes. Commit, and the **Check with AI** button appears on the site.
 
 If you later use your own domain, add it to `ALLOWED_ORIGINS` (for example `"https://risejieh.github.io,https://secondwindlaptops.com"`) and run `npx wrangler deploy` again.
