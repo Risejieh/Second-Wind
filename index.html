@@ -188,7 +188,12 @@ p{margin:0}
 .finder{margin-top:24px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px 32px;align-items:start}
 .finder-main{display:grid;gap:10px;min-width:0}
 .finder .field input{font-size:1rem;padding:12px 14px}
+.ai-row{display:flex;gap:8px;flex-wrap:wrap}
+.ai-row input{flex:1 1 220px;min-width:0;font:inherit;font-size:1rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.ai-row .btn{flex:none}
+.ai-row .btn:disabled{opacity:.6;cursor:wait;transform:none}
 .dev-result{font-size:.95rem;min-height:1.5em}
+.dev-result small{display:block;margin-top:4px;font-size:.85rem;color:var(--muted)}
 .dev-result.hit{color:var(--cool)}
 .dev-result.miss{color:var(--muted)}
 .dev-result.no{color:var(--heat)}
@@ -305,8 +310,11 @@ table.cmp{border-collapse:collapse;width:100%;min-width:600px;font-size:.9rem}
         <div class="finder-main">
           <label class="field" for="devModel">
             <span class="label"><span class="en">Not sure? Type your brand and model</span><span class="zh">不确定？输入品牌和型号</span></span>
-            <input id="devModel" type="text" autocomplete="off" placeholder="e.g. Alienware m16 R1, Legion 5, Inspiron 15">
           </label>
+          <div class="ai-row">
+            <input id="devModel" type="text" autocomplete="off" placeholder="e.g. Alienware m16 R1, Legion 5, Inspiron 15">
+            <button class="btn" id="aiBtn" type="button" hidden><span class="en">Check with AI</span><span class="zh">AI 识别</span></button>
+          </div>
           <p class="dev-result" id="devResult" role="status"></p>
         </div>
         <details class="howto">
@@ -472,6 +480,11 @@ const CONTACT = {
   bookingUrl: ""   // Google Form link
 };
 
+/* AI device check. After setting up the Cloudflare Worker (see worker/README.md),
+   paste its address here, e.g. "https://second-wind-ai.yourname.workers.dev".
+   Leave it empty to use only the built-in keyword check. */
+const AI_ENDPOINT = "";
+
 /* Device types. The price list switches between these. */
 const TIERS = [
   { id: "std", en: "Standard laptop", zh: "普通笔记本",
@@ -560,13 +573,15 @@ const SERVICES = [
    (Apple, then desktops, then hard-to-open models, then gaming, then standard). */
 const MATCH = [
   { tier: "mac", words: ["macbook", "imac", "mac mini", "mac studio", "apple", "苹果"] },
-  { tier: "pc",  words: ["desktop", "tower", "custom pc", "pc build", "prebuilt", "pre-built", "optiplex", "aurora",
+  { tier: "pc",  words: ["desktop", "tower", "custom pc", "pc build", "prebuilt", "pre-built", "optiplex", "aurora r10", "aurora r11",
+                         "aurora r12", "aurora r13", "aurora r14", "aurora r15", "aurora r16",
                          "ibuypower", "cyberpowerpc", "cyberpower", "nzxt", "skytech", "omen 45l", "omen 40l", "omen 35l",
                          "omen 25l", "legion tower", "台式", "主机", "组装机"] },
-  { tier: "pre", words: ["alienware", "razer", "blade", "zephyrus", "scar", "rog flow", "flow x13", "flow z13", "titan",
-                         "raider", "stealth", "legion 9", "legion 9i", "xps", "surface", "spectre", "外星人", "雷蛇", "枪神"] },
+  { tier: "pre", words: ["alienware x14", "alienware x15", "alienware x16", "alienware x17", "alienware m16",
+                         "alienware m18", "razer", "blade", "zephyrus", "scar", "rog flow", "flow x13", "flow z13", "titan",
+                         "raider", "stealth", "legion 9", "legion 9i", "xps", "surface", "spectre", "雷蛇", "枪神"] },
   { tier: "std", words: ["msi modern", "msi prestige", "msi venture"] },
-  { tier: "gam", words: ["legion", "loq", "rog", "strix", "tuf", "nitro", "predator", "helios", "omen", "victus", "msi",
+  { tier: "gam", words: ["alienware", "外星人", "legion", "loq", "rog", "strix", "tuf", "nitro", "predator", "helios", "omen", "victus", "msi",
                          "katana", "sword", "cyborg", "pulse", "crosshair", "vector", "gf63", "aorus", "g15", "g16", "gaming",
                          "拯救者", "天选", "暗影精灵", "光影精灵", "机械革命", "雷神", "掠夺者", "游戏本"] },
   { tier: "std", words: ["inspiron", "latitude", "vostro", "ideapad", "thinkpad", "thinkbook", "yoga", "pavilion", "envy",
@@ -625,15 +640,87 @@ function onModel(value, source) {
     setTier(r.tier);
     out.className = "dev-result hit";
     out.innerHTML = both(
-      `Looks like a <strong>${t.en.toLowerCase()}</strong> (matched “${esc(r.word)}”). Prices below are updated.`,
-      `识别为：<strong>${t.zh}</strong>（匹配“${esc(r.word)}”），下方价格已更新。`);
+      `Quick match: <strong>${t.en.toLowerCase()}</strong> (matched “${esc(r.word)}”). Prices below are updated.`,
+      `快速识别：<strong>${t.zh}</strong>（匹配“${esc(r.word)}”），下方价格已更新。`) + aiHint();
   } else {
     out.className = "dev-result miss";
     out.innerHTML = both(
       "Couldn't tell from that. Pick the closest type above, or text me the model and I'll check.",
-      "没能识别这个型号。请选择最接近的类型，或者把型号发给我确认。");
+      "没能识别这个型号。请选择最接近的类型，或者把型号发给我确认。") + aiHint();
   }
   updateQuote();
+}
+
+/* ---------- AI check (needs AI_ENDPOINT) ---------- */
+const aiHint = () => AI_ENDPOINT
+  ? `<small>${both("For your exact model and generation, tap <b>Check with AI</b>.", "想按具体型号和代数判断，请点 <b>AI 识别</b>。")}</small>`
+  : "";
+
+async function aiCheck() {
+  const text = $("devModel").value.trim();
+  const out = $("devResult");
+  if (!AI_ENDPOINT) return;
+  if (text.length < 2) {
+    out.className = "dev-result miss";
+    out.innerHTML = both("Type your brand and model first.", "请先输入品牌和型号。");
+    return;
+  }
+  const btn = $("aiBtn");
+  btn.disabled = true;
+  out.className = "dev-result miss";
+  out.innerHTML = both("Checking your model…", "正在识别型号…");
+  try {
+    const res = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: text })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 429) {
+      out.className = "dev-result no";
+      out.innerHTML = both(
+        "You've used your AI checks for today. Pick the closest type above, or text me the model.",
+        "今天的 AI 识别次数已用完。请选择最接近的类型，或者把型号发给我。");
+    } else if (!res.ok || !data.tier) {
+      throw new Error(data.error || res.status);
+    } else {
+      showAI(data);
+    }
+  } catch (e) {
+    out.className = "dev-result miss";
+    out.innerHTML = both(
+      "The AI check isn't available right now. Pick the closest type above, or text me the model.",
+      "AI 识别暂时不可用。请选择最接近的类型，或者把型号发给我。");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showAI(d) {
+  const out = $("devResult");
+  const n = d.remaining;
+  const left = typeof n === "number"
+    ? `<small>${both(`${n} AI check${n === 1 ? "" : "s"} left today.`, `今天还剩 ${n} 次 AI 识别。`)}</small>`
+    : "";
+  if (d.tier === "mac") {
+    out.className = "dev-result no";
+    out.innerHTML = both("MacBooks and other Apple computers aren't serviced yet.", "暂时不维修 MacBook 等苹果电脑。") + left;
+    return;
+  }
+  if (d.tier === "unknown") {
+    out.className = "dev-result miss";
+    out.innerHTML = both("The AI couldn't tell what that is. Pick the closest type above, or text me the model.",
+      "AI 没能识别。请选择最接近的类型，或者把型号发给我。") + left;
+    return;
+  }
+  setTier(d.tier);
+  const t = tierById(d.tier);
+  const low = d.confidence === "low";
+  const name = d.name ? esc(d.name) : "";
+  out.className = "dev-result hit";
+  out.innerHTML = both(
+    `AI check: <strong>${t.en}</strong>${name ? ` (${name})` : ""}. ${esc(d.reason_en)}${low ? " It isn't fully sure, so please double-check the type above." : ""}`,
+    `AI 识别：<strong>${t.zh}</strong>${name ? `（${name}）` : ""}。${esc(d.reason_zh)}${low ? "AI 不完全确定，请再确认一下上面的类型。" : ""}`) + left;
 }
 
 /* ---------- rendering ---------- */
@@ -811,6 +898,11 @@ $("qList").addEventListener("change", e => {
 $("qTier").addEventListener("change", e => setTier(e.target.value));
 $("qHandoff").addEventListener("change", updateQuote);
 $("devModel").addEventListener("input", e => onModel(e.target.value, "dev"));
+if (AI_ENDPOINT) {
+  $("aiBtn").hidden = false;
+  $("aiBtn").addEventListener("click", aiCheck);
+  $("devModel").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); aiCheck(); } });
+}
 $("qModel").addEventListener("input", e => onModel(e.target.value, "quote"));
 $("langBtn").addEventListener("click", () => setLang(state.lang === "zh" ? "en" : "zh"));
 $("copyMsg").addEventListener("click", () => copyText($("qMsg").value, $("copyStatus"), $("qMsg")));

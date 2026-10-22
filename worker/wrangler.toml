@@ -1,0 +1,17 @@
+name = "second-wind-ai"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+[vars]
+# Your website's address (no path, no trailing slash). Separate several with commas.
+ALLOWED_ORIGINS = "https://risejieh.github.io"
+# Cheapest Claude model.
+MODEL = "claude-haiku-5-5"
+# AI checks each visitor gets per 24 hours.
+PER_IP_LIMIT = "2"
+# AI checks for the whole site per day (a backstop on cost).
+DAILY_LIMIT = "200"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
