@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get a Quote · Second Wind Laptop Care</title>
+<meta name="description" content="Build a repair quote for your laptop or PC: pick your device type, services, thermal compound and parts, then send the request.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-page="quote">
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="index.html" aria-label="Second Wind Laptop Care, home">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g fill="currentColor">
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(120 16 16)"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(240 16 16)"/>
+        </g>
+        <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
+      </svg>
+      <span class="brand-name"><span class="en">Second Wind</span><span class="zh">凉芯电脑</span><small><span class="en">Laptop Care</span><span class="zh">Second Wind Laptop Care</span></small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" data-page="home"><span class="en">Home</span><span class="zh">首页</span></a>
+      <a href="prices.html" data-page="prices"><span class="en">Prices</span><span class="zh">价格</span></a>
+      <a class="nav-cta" href="quote.html" data-page="quote"><span class="en">Get a quote</span><span class="zh">获取报价</span></a>
+      <a href="about.html" data-page="about"><span class="en">About</span><span class="zh">关于</span></a>
+      <a href="contact.html" data-page="contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+    </nav>
+    <button class="ghost lang" id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">Get a quote</span><span class="zh">获取报价</span></p>
+        <h1><span class="en">Pick what you need, then send it to me</span><span class="zh">选好服务，发送给我</span></h1>
+        <p><span class="en">Your estimate updates as you go. Send it through the request form, or copy the message and text or WeChat me.</span><span class="zh">估价会随选择实时更新。可以通过申请表发送，也可以复制信息用短信或微信发给我。</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap quote-grid">
+      <div>
+        <div class="q-block">
+          <p class="step-label"><b>01</b><span class="label"><span class="en">Your computer</span><span class="zh">你的电脑</span></span></p>
+          <div class="q-fields" style="margin-top:0">
+            <label class="field" for="qTier">
+              <span class="label"><span class="en">Device type</span><span class="zh">电脑类型</span></span>
+              <select id="qTier"></select>
+            </label>
+          </div>
+      <div class="finder">
+        <div class="finder-main">
+          <label class="field" for="devModel">
+            <span class="label"><span class="en">Not sure? Type your brand and model</span><span class="zh">不确定？输入品牌和型号</span></span>
+          </label>
+          <div class="ai-row">
+            <input id="devModel" type="text" autocomplete="off" placeholder="e.g. Alienware m16 R1, Legion 5, Inspiron 15">
+            <button class="btn" id="aiBtn" type="button" hidden><span class="en">Check with AI</span><span class="zh">AI 识别</span></button>
+          </div>
+          <p class="dev-result" id="devResult" role="status"></p>
+        </div>
+        <details class="howto">
+          <summary><span class="en">How do I find my model?</span><span class="zh">怎么查看电脑型号？</span></summary>
+          <ol>
+            <li><span class="en">Press the Windows key, type <b>System Information</b> (or <b>msinfo32</b>) and open it.</span><span class="zh">按 Windows 键，搜索 <b>系统信息</b>（或 <b>msinfo32</b>）并打开。</span></li>
+            <li><span class="en"><b>System Model</b> is your computer's model. <b>BaseBoard Product</b> is the motherboard model.</span><span class="zh"><b>系统型号</b> 就是电脑型号，<b>主板产品</b> 是主板型号。</span></li>
+            <li><span class="en">Or check the sticker on the bottom of the laptop, or the box it came in.</span><span class="zh">也可以看笔记本底部的标签或包装盒。</span></li>
+            <li><span class="en">Desktops: check the label on the case. For a custom build, send me the motherboard model.</span><span class="zh">台式机看机箱上的标签；组装机请发主板型号。</span></li>
+          </ol>
+        </details>
+      </div>
+        </div>
+
+        <div class="q-block">
+          <p class="step-label"><b>02</b><span class="label"><span class="en">Services</span><span class="zh">服务项目</span></span></p>
+          <fieldset class="q-list" id="qList"><legend class="sr">Services</legend></fieldset>
+        </div>
+
+        <div class="q-block" id="qCompoundBlock">
+          <p class="step-label"><b>03</b><span class="label"><span class="en">Thermal compound</span><span class="zh">导热材料</span></span></p>
+          <fieldset class="choice-list" id="qCompoundList"><legend class="sr">Thermal compound</legend></fieldset>
+        </div>
+
+        <div class="q-block" id="qPartsBlock">
+          <p class="step-label"><b>04</b><span class="label"><span class="en">Parts</span><span class="zh">配件</span></span></p>
+          <fieldset class="choice-list" id="qPartsList"><legend class="sr">Parts</legend></fieldset>
+        </div>
+
+        <div class="q-block">
+          <p class="step-label"><b>05</b><span class="label"><span class="en">Hand-off</span><span class="zh">交接方式</span></span></p>
+          <div class="q-fields" style="margin-top:0">
+            <label class="field" for="qHandoff">
+              <span class="label sr">Hand-off</span>
+              <select id="qHandoff"></select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary" aria-live="polite">
+        <div class="total">
+          <span class="label"><span class="en">Estimated labor</span><span class="zh">预估人工费</span></span>
+          <span><span class="num" id="qTotal">$50</span> <span class="parts" id="qParts"></span></span>
+        </div>
+        <label class="field" for="qMsg">
+          <span class="label"><span class="en">Your message</span><span class="zh">要发送的信息</span></span>
+          <textarea class="msg" id="qMsg" readonly></textarea>
+        </label>
+        <div class="copy-row">
+          <a class="btn" id="sendForm" href="contact.html" target="_blank" rel="noopener" hidden><span class="en">Send this request</span><span class="zh">发送报价申请</span></a>
+          <button class="ghost" type="button" id="copyMsg"><span class="en">Copy message</span><span class="zh">复制信息</span></button>
+          <span class="status" id="copyStatus" role="status"></span>
+        </div>
+        <p class="hint"><span class="en">“Send this request” opens a short form with your choices already filled in. You can also copy the message and text or WeChat me.</span><span class="zh">点“发送报价申请”会打开已预填好的表单；也可以复制信息，通过短信或微信发给我。</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Second Wind Laptop Care · 凉芯电脑 · Ann Arbor &amp; Novi, Michigan · (734) 508-2592</span>
+    <span><span class="en">Independent service. Not affiliated with the University of Michigan.</span><span class="zh">个人独立经营，与密歇根大学无关。</span></span>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

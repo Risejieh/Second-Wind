@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prices · Second Wind Laptop Care</title>
+<meta name="description" content="Laptop and PC repair prices by device type: standard, gaming, high-end and desktop. Thermal compound options and free RAM and SSD recommendations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-page="prices">
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="index.html" aria-label="Second Wind Laptop Care, home">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g fill="currentColor">
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(120 16 16)"/>
+          <path d="M16 16C14.6 11 16.4 6.6 21 5.4C22.4 9.6 20.4 13.6 16 16Z" transform="rotate(240 16 16)"/>
+        </g>
+        <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
+      </svg>
+      <span class="brand-name"><span class="en">Second Wind</span><span class="zh">凉芯电脑</span><small><span class="en">Laptop Care</span><span class="zh">Second Wind Laptop Care</span></small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" data-page="home"><span class="en">Home</span><span class="zh">首页</span></a>
+      <a href="prices.html" data-page="prices"><span class="en">Prices</span><span class="zh">价格</span></a>
+      <a class="nav-cta" href="quote.html" data-page="quote"><span class="en">Get a quote</span><span class="zh">获取报价</span></a>
+      <a href="about.html" data-page="about"><span class="en">About</span><span class="zh">关于</span></a>
+      <a href="contact.html" data-page="contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+    </nav>
+    <button class="ghost lang" id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button>
+  </div>
+</header>
+
+<main>
+<section class="page-head">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label"><span class="en">Prices</span><span class="zh">价格</span></p>
+        <h1><span class="en">Clear prices, labor plus parts</span><span class="zh">价格透明：人工费 + 配件费</span></h1>
+        <p><span class="en">Prices depend on how hard your computer is to open. Parts are billed at cost, and I quote them before ordering anything.</span><span class="zh">价格按电脑拆装难度分档。配件按成本价收取，下单前会先报价确认。</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="block">
+        <div class="sub-head">
+          <h2><span class="en">1. Pick your computer type</span><span class="zh">1. 选择电脑类型</span></h2>
+          <p><span class="en">Gaming laptops have more screws, two fans and more heatpipes to clean. Some high-end models are packed tight or ship with liquid metal.</span><span class="zh">游戏本螺丝更多、双风扇、热管更多；部分高端机型结构紧凑或出厂使用液金。</span></p>
+        </div>
+        <fieldset class="tiers" id="tierList">
+          <legend class="sr">Device type</legend>
+        </fieldset>
+      <div class="finder">
+        <div class="finder-main">
+          <label class="field" for="devModel">
+            <span class="label"><span class="en">Not sure? Type your brand and model</span><span class="zh">不确定？输入品牌和型号</span></span>
+          </label>
+          <div class="ai-row">
+            <input id="devModel" type="text" autocomplete="off" placeholder="e.g. Alienware m16 R1, Legion 5, Inspiron 15">
+            <button class="btn" id="aiBtn" type="button" hidden><span class="en">Check with AI</span><span class="zh">AI 识别</span></button>
+          </div>
+          <p class="dev-result" id="devResult" role="status"></p>
+        </div>
+        <details class="howto">
+          <summary><span class="en">How do I find my model?</span><span class="zh">怎么查看电脑型号？</span></summary>
+          <ol>
+            <li><span class="en">Press the Windows key, type <b>System Information</b> (or <b>msinfo32</b>) and open it.</span><span class="zh">按 Windows 键，搜索 <b>系统信息</b>（或 <b>msinfo32</b>）并打开。</span></li>
+            <li><span class="en"><b>System Model</b> is your computer's model. <b>BaseBoard Product</b> is the motherboard model.</span><span class="zh"><b>系统型号</b> 就是电脑型号，<b>主板产品</b> 是主板型号。</span></li>
+            <li><span class="en">Or check the sticker on the bottom of the laptop, or the box it came in.</span><span class="zh">也可以看笔记本底部的标签或包装盒。</span></li>
+            <li><span class="en">Desktops: check the label on the case. For a custom build, send me the motherboard model.</span><span class="zh">台式机看机箱上的标签；组装机请发主板型号。</span></li>
+          </ol>
+        </details>
+      </div>
+      </div>
+
+      <div class="block">
+        <div class="sub-head">
+          <h2><span class="en">2. Prices for your computer</span><span class="zh">2. 对应价格</span></h2>
+        </div>
+        <p class="tier-now"><span class="label"><span class="en">Showing prices for</span><span class="zh">当前价格档</span></span><strong id="tierNow"></strong><a href="#tierList"><span class="en">Change type</span><span class="zh">更改类型</span></a></p>
+        <div class="svc-groups" id="svcGroups"></div>
+        <p class="tier-note" id="tierNote"></p>
+      </div>
+
+      <div class="block">
+        <div class="sub-head">
+          <h2><span class="en">Choose your thermal compound</span><span class="zh">自选导热材料</span></h2>
+          <p><span class="en">Every cleaning includes standard paste. Upgrade if you want lower temperatures or a longer-lasting result. Not sure? I'll recommend one for your computer.</span><span class="zh">每次清灰都包含标准硅脂。想要更低温度或更持久的效果可以升级。不确定的话我会按你的电脑推荐。</span></p>
+        </div>
+        <div class="options" id="compoundList"></div>
+      </div>
+
+      <div class="block">
+        <div class="sub-head">
+          <h2><span class="en">RAM and SSD upgrades</span><span class="zh">内存和固态升级</span></h2>
+          <p><span class="en">Tell me your model and budget and I'll recommend RAM or an SSD that fits, for free. Then either bring the part to me, or I'll buy it for you at cost after a deposit.</span><span class="zh">告诉我你的型号和预算，我免费推荐兼容的内存或固态。你可以自己买好交给我，也可以付定金后由我按成本价代购。</span></p>
+        </div>
+      </div>
+
+      <div class="fine">
+        <div><strong><span class="en">Diagnosis</span><span class="zh">检测</span></strong><span><span class="en">Free if I do the repair, $20 if not.</span><span class="zh">维修则免费，不修收 $20。</span></span></div>
+        <div><strong><span class="en">Parts deposit</span><span class="zh">配件定金</span></strong><span><span class="en">Paid before I order a part, credited to your bill.</span><span class="zh">订配件前先付定金，最后从总价中扣除。</span></span></div>
+        <div><strong><span class="en">Pickup &amp; drop-off</span><span class="zh">上门取送</span></strong><span><span class="en">Free within 10 miles, or meet on campus.</span><span class="zh">10 英里内免费，也可以在校园见面交接。</span></span></div>
+      </div>
+      <details class="compare">
+        <summary><span class="en">Compare prices across all device types</span><span class="zh">对比所有类型的价格</span></summary>
+        <div class="table-wrap"><table class="cmp" id="cmpTable"></table></div>
+        <p class="hint"><span class="en">Labor prices in USD. “—” means not offered for that type.</span><span class="zh">以上为人工费（美元）。“—” 表示该类型不提供此服务。</span></p>
+      </details>
+
+      <div class="cta-band" style="margin-top:clamp(32px,5vw,48px)">
+        <div>
+          <h2><span class="en">Ready? Build your quote.</span><span class="zh">准备好了？在线估价。</span></h2>
+          <p><span class="en">Your computer type carries over to the quote page.</span><span class="zh">你选的电脑类型会自动带到估价页。</span></p>
+        </div>
+        <a class="btn big" href="quote.html"><span class="en">Get a quote</span><span class="zh">在线估价</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Second Wind Laptop Care · 凉芯电脑 · Ann Arbor &amp; Novi, Michigan · (734) 508-2592</span>
+    <span><span class="en">Independent service. Not affiliated with the University of Michigan.</span><span class="zh">个人独立经营，与密歇根大学无关。</span></span>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
